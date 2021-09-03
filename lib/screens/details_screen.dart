@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/widgets/widgets.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class DetailsScreen extends StatelessWidget {
             _OverView(),
             _OverView(),
             _OverView(),
+            CastingCards()
           ]),
         )
       ],
@@ -40,6 +42,7 @@ class _CustomAppBar extends StatelessWidget {
         centerTitle: true,
         titlePadding: EdgeInsets.all(0),
         title: Container(
+          padding: EdgeInsets.only(bottom: 10),
           width: double.infinity,
           color: Colors.black12,
           alignment: Alignment.bottomCenter,
