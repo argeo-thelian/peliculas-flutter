@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/models/models.dart';
 import 'package:peliculas/widgets/widgets.dart';
 
 class DetailsScreen extends StatelessWidget {
@@ -8,15 +9,16 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     //TODO: Cambiar luego por instancia de movie
 
-    final String movie =
-        ModalRoute.of(context)?.settings.arguments.toString() ?? 'no-movie';
+    // final String movie = ModalRoute.of(context)?.settings.arguments.toString() ?? 'no-movie';
+    final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
+    print(movie.title);
     return Scaffold(
         body: CustomScrollView(
       slivers: [
-        _CustomAppBar(),
+        _CustomAppBar(movie),
         SliverList(
           delegate: SliverChildListDelegate([
-            _PostAndTitle(),
+            _PostAndTitle(movie),
             _OverView(),
             _OverView(),
             _OverView(),
@@ -29,7 +31,8 @@ class DetailsScreen extends StatelessWidget {
 }
 
 class _CustomAppBar extends StatelessWidget {
-  const _CustomAppBar({Key? key}) : super(key: key);
+  final Movie movie;
+  const _CustomAppBar(this.movie);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,7 @@ class _CustomAppBar extends StatelessWidget {
           color: Colors.black12,
           alignment: Alignment.bottomCenter,
           child: Text(
-            'movie.title',
+            movie.title,
             style: TextStyle(
               fontSize: 16,
             ),
@@ -55,7 +58,9 @@ class _CustomAppBar extends StatelessWidget {
         ),
         background: FadeInImage(
           placeholder: AssetImage('assets/loading.gif'),
-          image: NetworkImage('https://via.placeholder.com/500x300'),
+          image: NetworkImage(
+            movie.fullPosterImg,
+          ), //'https://via.placeholder.com/500x300'),
           fit: BoxFit.cover,
         ),
       ),
@@ -64,7 +69,9 @@ class _CustomAppBar extends StatelessWidget {
 }
 
 class _PostAndTitle extends StatelessWidget {
-  const _PostAndTitle({Key? key}) : super(key: key);
+  final Movie movie;
+
+  const _PostAndTitle(this.movie);
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +86,9 @@ class _PostAndTitle extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: FadeInImage(
               placeholder: AssetImage('assets/no-image.jpg'),
-              image: NetworkImage('https://via.placeholder.com/200x300'),
+              image: NetworkImage(
+                movie.fullPosterImg,
+              ), //,'https://via.placeholder.com/200x300'),
               height: 150,
             ),
           ),
@@ -89,11 +98,13 @@ class _PostAndTitle extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('movie.title',
-                  style: textTheme.headline5,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2),
-              Text('movie.originalTittle ',
+              Text(
+                movie.title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: textTheme.headline6,
+              ),
+              Text(movie.originalTitle,
                   style: textTheme.subtitle1,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2),
@@ -103,7 +114,7 @@ class _PostAndTitle extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
-                  Text('movie.voteAverage', style: textTheme.caption)
+                  Text('${movie.voteAverage}', style: textTheme.caption)
                 ],
               )
             ],
