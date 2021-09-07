@@ -41,6 +41,12 @@ class Movie {
     return 'https://media.comicbook.com/2020/02/the-simpsons-marvel-avengers-endgame-bart-the-bad-guy-poster-1208678.jpeg?auto=webp&width=1000&height=1464&crop=1000:1464';
   }
 
+  get fullBackdropPath {
+    if (this.posterPath != null)
+      return 'https://image.tmdb.org/t/p/w500${this.backdropPath}';
+    return 'https://media.comicbook.com/2020/02/the-simpsons-marvel-avengers-endgame-bart-the-bad-guy-poster-1208678.jpeg?auto=webp&width=1000&height=1464&crop=1000:1464';
+  }
+
   factory Movie.fromJson(String str) => Movie.fromMap(json.decode(str));
 
   // String toJson() => json.encode(toMap());

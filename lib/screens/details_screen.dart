@@ -11,7 +11,7 @@ class DetailsScreen extends StatelessWidget {
 
     // final String movie = ModalRoute.of(context)?.settings.arguments.toString() ?? 'no-movie';
     final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
-    print(movie.title);
+
     return Scaffold(
         body: CustomScrollView(
       slivers: [
@@ -19,10 +19,8 @@ class DetailsScreen extends StatelessWidget {
         SliverList(
           delegate: SliverChildListDelegate([
             _PostAndTitle(movie),
-            _OverView(),
-            _OverView(),
-            _OverView(),
-            CastingCards()
+            _OverView(movie),
+            CastingCards(),
           ]),
         )
       ],
@@ -45,12 +43,13 @@ class _CustomAppBar extends StatelessWidget {
         centerTitle: true,
         titlePadding: EdgeInsets.all(0),
         title: Container(
-          padding: EdgeInsets.only(bottom: 10),
+          padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
           width: double.infinity,
           color: Colors.black12,
           alignment: Alignment.bottomCenter,
           child: Text(
             movie.title,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
             ),
@@ -59,7 +58,7 @@ class _CustomAppBar extends StatelessWidget {
         background: FadeInImage(
           placeholder: AssetImage('assets/loading.gif'),
           image: NetworkImage(
-            movie.fullPosterImg,
+            movie.fullBackdropPath,
           ), //'https://via.placeholder.com/500x300'),
           fit: BoxFit.cover,
         ),
@@ -70,12 +69,12 @@ class _CustomAppBar extends StatelessWidget {
 
 class _PostAndTitle extends StatelessWidget {
   final Movie movie;
-
   const _PostAndTitle(this.movie);
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final size = MediaQuery.of(context).size;
 
     return Container(
       margin: EdgeInsets.only(top: 20),
@@ -95,29 +94,34 @@ class _PostAndTitle extends StatelessWidget {
           SizedBox(
             width: 20,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                movie.title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                style: textTheme.headline6,
-              ),
-              Text(movie.originalTitle,
-                  style: textTheme.subtitle1,
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: size.width * 0.60,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  movie.title,
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 2),
-              Row(
-                children: [
-                  Icon(Icons.star_outline, size: 15, color: Colors.grey),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text('${movie.voteAverage}', style: textTheme.caption)
-                ],
-              )
-            ],
+                  maxLines: 3,
+                  style: textTheme.headline6,
+                ),
+                Text(movie.originalTitle,
+                    style: textTheme.subtitle1,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2),
+                Row(
+                  children: [
+                    Icon(Icons.star_outline, size: 15, color: Colors.grey),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text('${movie.voteAverage}', style: textTheme.caption)
+                  ],
+                )
+              ],
+            ),
           )
         ],
       ),
@@ -126,14 +130,16 @@ class _PostAndTitle extends StatelessWidget {
 }
 
 class _OverView extends StatelessWidget {
-  const _OverView({Key? key}) : super(key: key);
+  final Movie movie;
+
+  const _OverView(this.movie);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: Text(
-        'Nulla non aute exercitation deserunt enim et qui nostrud nisi. Irure occaecat officia est mollit ad aliquip magna consectetur enim. Nostrud laborum elit duis esse sit irure dolor dolor. Cillum nisi ex ad laboris consequat qui officia minim laboris velit adipisicing tempor ea. Minim ullamco anim qui ipsum aute ex veniam. Et sunt aliquip ea reprehenderit ut non reprehenderit non proident voluptate.',
+        movie.overview,
         textAlign: TextAlign.justify,
         style: Theme.of(context).textTheme.subtitle1,
       ),
