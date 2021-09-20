@@ -11,6 +11,8 @@ class MoviesProvider extends ChangeNotifier {
 
   List<Movie> onDisplayMovies = [];
   List<Movie> popularMovies = [];
+  Map<int, List<Cast>> moviesCast = {};
+
   int _popularPage = 0;
   //Constructor
   MoviesProvider() {
@@ -41,7 +43,7 @@ class MoviesProvider extends ChangeNotifier {
 
     /** Se recoje el Json en   { response.body } */
     final nowPlayinResponse = NowPlayingResponse.fromJson(jsonData);
-
+    
     /** onDisplayMovies obtiene los valores  { results = movies } del Json*/
     this.onDisplayMovies = nowPlayinResponse.results;
     notifyListeners(); //Redibujar widgets
@@ -59,5 +61,9 @@ class MoviesProvider extends ChangeNotifier {
     this.popularMovies = [...popularMovies, ...popularResponse.results];
     // print('Valor pelis: ${popularResponse.results.length}');
     notifyListeners(); //Redibujar widgets
+  }
+
+  getMovieCast(int movieId) async {
+    //TODO: revisar el mapa
   }
 }
