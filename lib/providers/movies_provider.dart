@@ -43,7 +43,7 @@ class MoviesProvider extends ChangeNotifier {
 
     /** Se recoje el Json en   { response.body } */
     final nowPlayinResponse = NowPlayingResponse.fromJson(jsonData);
-    
+
     /** onDisplayMovies obtiene los valores  { results = movies } del Json*/
     this.onDisplayMovies = nowPlayinResponse.results;
     notifyListeners(); //Redibujar widgets
@@ -63,7 +63,14 @@ class MoviesProvider extends ChangeNotifier {
     notifyListeners(); //Redibujar widgets
   }
 
-  getMovieCast(int movieId) async {
+  Future<List<Cast>> getMovieCast(int movieId) async {
     //TODO: revisar el mapa
+    if (moviesCast.containsKey(movieId)) return moviesCast[movieId]!;
+
+    print('Pidiendo un print al server - CAST ');
+    final jsonData = await this._getJsonData('3/movie/$movieId/credits');
+    final creditsResponse = CreditsResponse.fromJson(jsonData);
+    moviesCast[movieId] = creditsResponse.cast;
+    return creditsResponse.cast;
   }
 }
